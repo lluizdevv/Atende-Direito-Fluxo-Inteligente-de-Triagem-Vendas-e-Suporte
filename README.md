@@ -27,3 +27,34 @@ O workflow atua como um subfluxo conversacional (`subflow_callable`) acionado po
 .
 ├── workflow_atendedireito.json   # Definição completa do fluxo (36 nós) pronta para importação
 └── README.md                  # Documentação técnica do projet
+```
+
+## 🔄 Etapas do Fluxo
+Recepção e Classificação (n_start → if_else)
+
+* 1 **Filtra mensagens de entrada pela tag de canal.**
+
+* 2 **Verifica se o contato possui a tag novo_contato** (promovendo-o a Recorrente e limpando tags de sessões anteriores) ou se já é Recorrente. Caso contrário, inicia o onboarding solicitando o nome.
+
+* 3 **Menus de Atendimento** (menu_contato_novo / menu_contato_recorrente)
+```text
+1. Vendas e Produtos → Segue para o catálogo comercial.
+
+2. Suporte Técnico → Segue para triagem de incidentes.
+
+3. Financeiro → Aplica tag financeira e transfere ao departamento responsável.
+
+4. Falar com atendente → Pausa a automação por 2 horas e transfere para atendimento geral.
+```
+
+* 4 **Qualificação Comercial & MCP** (produtos → mcp → confirmacao_recebimento)
+
+* 5 **Mapeia o ID do produto escolhido** (flow.id_produto_escolhido), valida o e-mail (flow.emai_cliente), cria o card no CRM e executa a chamada MCP associateProduct vinculando o produto ao negócio recém-criado.
+
+* 6 **Suporte e Encerramento** (suporte → transferencia_suporte → n_end)
+
+* 7 **Registra o relato** (flow.relato_problema), cria card no estágio de suporte do CRM e transfere a conversa.
+
+## 👤 Desenvolvedores
+- Rafaela Tavares
+- Luiz Vinicius
