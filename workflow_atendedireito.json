@@ -1,0 +1,2339 @@
+{
+  "format": "adflow",
+  "format_version": 1,
+  "kind": "flow-bundle",
+  "exported_at": "2026-11-06T12:49:30-03:00",
+  "source_workspace_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "checksum": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "encryption": {
+    "alg": "AES-256-GCM",
+    "kdf": "pbkdf2_sha256",
+    "iterations": 0,
+    "salt": "",
+    "secrets_present": false
+  },
+  "entities": {
+    "flow": {
+      "name": "Atendimento Virtual - Demo",
+      "slug": "atendimento-demo",
+      "kind": "subflow_callable",
+      "category": "chat",
+      "reusable": false,
+      "description": null,
+      "is_main": false
+    },
+    "flow_version": {
+      "version_number": 42,
+      "status": "published",
+      "definition": {
+        "kind": "subflow_callable",
+        "nodes": [
+          {
+            "id": "n_start",
+            "kind": "start",
+            "next": "if_else",
+            "inputs": {
+              "buffer": {
+                "type": "literal",
+                "value": {
+                  "enabled": true,
+                  "max_size": 10,
+                  "debounce_ms": 2000
+                }
+              },
+              "filters": {
+                "type": "literal",
+                "value": [
+                  {
+                    "op": "eq",
+                    "field": "contact.tags",
+                    "value": "01TAG000000000000000000001"
+                  }
+                ]
+              },
+              "event_name": {
+                "type": "literal",
+                "value": "message.received"
+              }
+            },
+            "position": {
+              "x": 20,
+              "y": 1966
+            },
+            "triggers": [
+              {
+                "id": "user_input",
+                "name": null,
+                "notes": null,
+                "active": true,
+                "config": {
+                  "buffer": {
+                    "enabled": true,
+                    "max_size": 10,
+                    "debounce_ms": 2000
+                  },
+                  "filters": [
+                    {
+                      "op": "eq",
+                      "field": "contact.tags",
+                      "value": "01TAG000000000000000000001"
+                    }
+                  ],
+                  "event_name": "message.received"
+                },
+                "trigger_type": "system_event"
+              }
+            ],
+            "trigger_type": "system_event"
+          },
+          {
+            "id": "n_end",
+            "kind": "end",
+            "inputs": [],
+            "position": {
+              "x": 4998,
+              "y": 2151.75
+            }
+          },
+          {
+            "id": "if_else",
+            "kind": "if_else",
+            "inputs": {
+              "cases": {
+                "type": "literal",
+                "value": [
+                  {
+                    "case_id": "case_1793881894670_1",
+                    "conditions": [
+                      {
+                        "id": "cond_1793881894670_2",
+                        "value": null,
+                        "value_type": "constant",
+                        "variable_selector": [
+                          "event",
+                          "conversation",
+                          "contact",
+                          "tags"
+                        ],
+                        "comparison_operator": "contains",
+                        "sub_variable_condition": {
+                          "conditions": [
+                            {
+                              "id": "subcond_1793882923937_1",
+                              "key": "name",
+                              "value": "novo_contato",
+                              "comparison_operator": "eq"
+                            }
+                          ],
+                          "logical_operator": "and"
+                        }
+                      }
+                    ],
+                    "logical_operator": "and"
+                  },
+                  {
+                    "case_id": "case_1793882968952_1",
+                    "conditions": [
+                      {
+                        "id": "cond_1793882968952_2",
+                        "value": null,
+                        "value_type": "constant",
+                        "variable_selector": [
+                          "event",
+                          "conversation",
+                          "contact",
+                          "tags"
+                        ],
+                        "comparison_operator": "contains",
+                        "sub_variable_condition": {
+                          "conditions": [
+                            {
+                              "id": "subcond_1793883004707_1",
+                              "key": "name",
+                              "value": "Recorrente",
+                              "comparison_operator": "eq"
+                            }
+                          ],
+                          "logical_operator": "and"
+                        }
+                      }
+                    ],
+                    "logical_operator": "and"
+                  }
+                ]
+              }
+            },
+            "position": {
+              "x": 378,
+              "y": 1909.5
+            },
+            "next_cases": {
+              "case_1793881894670_1": "tag_contato_recorrente",
+              "case_1793882968952_1": "menu_contato_recorrente"
+            },
+            "next_false": "mensagem_inicial"
+          },
+          {
+            "id": "tag_contato_recorrente",
+            "kind": "platform_action",
+            "next": "menu_contato_recorrente",
+            "label": "Tag contato recorrente",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG000000000000000000REC"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_id": {
+                      "type": "literal",
+                      "value": "01TAG000000000000000000NOV"
+                    },
+                    "operation": "remove_tag"
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_id": {
+                      "type": "literal",
+                      "value": "01TAG00000000000000000LEAD"
+                    },
+                    "operation": "remove_tag"
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_id": {
+                      "type": "literal",
+                      "value": "01TAG000000000000000000SUP"
+                    },
+                    "operation": "remove_tag"
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_id": {
+                      "type": "literal",
+                      "value": "01TAG000000000000000000FIN"
+                    },
+                    "operation": "remove_tag"
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_id": {
+                      "type": "literal",
+                      "value": "01TAG0000000000000000TRANS"
+                    },
+                    "operation": "remove_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 1258,
+              "y": 1754
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "menu_contato_recorrente",
+            "kind": "send_message",
+            "label": "Menu contato recorrente",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Olá, {{contact.name}}! Que bom que voltou, como posso te ajudar hoje? Selecione a opção desejada:"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "interactive_buttons"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": [
+                  {
+                    "id": "qr_1793883903905_2",
+                    "title": "1. Vendas e Produtos",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883916363_3",
+                    "title": "2. Suporte Técnico",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883923346_4",
+                    "title": "3. Financeiro",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883929069_5",
+                    "title": "4. Falar com atendente",
+                    "payload": null
+                  }
+                ]
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 1638,
+              "y": 1888.75
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "n_1793975466686",
+              "qr_1793883903905_2": "produtos",
+              "qr_1793883916363_3": "suporte",
+              "qr_1793883923346_4": "tag_financeiro",
+              "qr_1793883929069_5": "mensagem_transferencia_humano"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "mensagem_inicial",
+            "kind": "send_message",
+            "label": "Mensagem inicial",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Olá! Seja bem-vindo(a) ao nosso atendimento virtual. Para começarmos de forma personalizada, como você gostaria de ser chamado(a)?"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": "flow.nome_cliente"
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 878,
+              "y": 2276.25
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "tag_contato_novo"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "tag_contato_novo",
+            "kind": "platform_action",
+            "next": "menu_contato_novo",
+            "label": "Tag contato novo",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG000000000000000000NOV"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 1258,
+              "y": 1605
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "menu_contato_novo",
+            "kind": "send_message",
+            "label": "Menu contato novo",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Prazer, {{flow.nome_cliente.title}}, como posso te ajudar hoje?"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "interactive_buttons"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": [
+                  {
+                    "id": "qr_1793883903905_2",
+                    "title": "1. Vendas e Produtos",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883916363_3",
+                    "title": "2. Suporte Técnico",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883923346_4",
+                    "title": "3. Financeiro",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883929069_5",
+                    "title": "4. Falar com atendente",
+                    "payload": null
+                  }
+                ]
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 1638,
+              "y": 1328.75
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "tentativas_sem_opcao",
+              "qr_1793883903905_2": "produtos",
+              "qr_1793883916363_3": "suporte",
+              "qr_1793883923346_4": "tag_financeiro",
+              "qr_1793883929069_5": "mensagem_transferencia_humano"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "mensagem_transferencia_humano",
+            "kind": "send_message",
+            "next": "transferir_e_pausar_automacao",
+            "label": "Mensagem transferência humano",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Estou transferindo você para a nossa equipe. Aguarde um instante!"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 2898,
+              "y": 2564
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "transferir_e_pausar_automacao",
+            "kind": "platform_action",
+            "next": "n_end",
+            "label": "Transferir e pausar automação",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "until": {
+                      "type": "literal",
+                      "value": "PT2H"
+                    },
+                    "domain": "conversation",
+                    "reason": {
+                      "type": "literal",
+                      "value": "human_takeover"
+                    },
+                    "operation": "pause_automation"
+                  },
+                  {
+                    "domain": "conversation",
+                    "operation": "transfer_department",
+                    "department_id": {
+                      "type": "literal",
+                      "value": "01DEP0000000000000000GERAL"
+                    }
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG0000000000000000TRANS",
+                        "01TAG00000000000000000PAUS"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 3337,
+              "y": 2577
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "tentativas_sem_opcao",
+            "kind": "assigner",
+            "next": "if_else_2",
+            "label": "Tentativas sem opção",
+            "inputs": {
+              "items": {
+                "type": "literal",
+                "value": [
+                  {
+                    "value": 1,
+                    "operation": "+=",
+                    "input_type": "constant",
+                    "variable_selector": [
+                      "flow",
+                      "tentativas"
+                    ]
+                  }
+                ]
+              },
+              "version": {
+                "type": "literal",
+                "value": "2"
+              },
+              "transactional": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 2058,
+              "y": 1066.25
+            },
+            "action_code": "data.assigner"
+          },
+          {
+            "id": "if_else_2",
+            "kind": "if_else",
+            "inputs": {
+              "cases": {
+                "type": "literal",
+                "value": [
+                  {
+                    "case_id": "case_1793895248349_1",
+                    "conditions": [
+                      {
+                        "id": "cond_1793895248349_2",
+                        "value": "2",
+                        "value_type": "constant",
+                        "variable_selector": [
+                          "flow",
+                          "tentativas"
+                        ],
+                        "comparison_operator": "gt"
+                      }
+                    ],
+                    "logical_operator": "and"
+                  }
+                ]
+              }
+            },
+            "position": {
+              "x": 2528,
+              "y": 983.75
+            },
+            "next_cases": {
+              "case_1793895248349_1": "mensagem_transferencia_humano"
+            },
+            "next_false": "nao_selecionar_opcao2"
+          },
+          {
+            "id": "nao_selecionar_opcao2",
+            "kind": "send_message",
+            "next": "menu_contato_novo",
+            "label": "Não selecionar opção2",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Não consegui entender sua mensagem. Toque em **“Ver opções”** e escolha uma das opções da lista, por favor."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 2898,
+              "y": 511.75
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "nao_selecionar_opcao",
+            "kind": "send_message",
+            "next": "menu_contato_novo",
+            "label": "Não selecionar opção",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Não consegui entender sua mensagem. Toque em **“Ver opções”** e escolha uma das opções da lista, por favor."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 1218,
+              "y": 1339.75
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "produtos",
+            "kind": "send_message",
+            "label": "Produtos",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Ótima escolha, {{contact.name}}! Qual serviço você tem interesse?"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": "flow.produto_escolhido"
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "interactive_buttons"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": [
+                  {
+                    "id": "qr_1793883903905_2",
+                    "title": "1. Atende direito",
+                    "payload": "01PROD00000000000000000001"
+                  },
+                  {
+                    "id": "qr_1793883916363_3",
+                    "title": "2. Atende direito ONE",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883923346_4",
+                    "title": "3. Meu Estagiário",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793883929069_5",
+                    "title": "4. Sync",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793897656790_1",
+                    "title": "5. Audly",
+                    "payload": null
+                  }
+                ]
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 2058,
+              "y": 1400.75
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "produto_sem_correspondencia",
+              "qr_1793883903905_2": "produto_atende_direito_2",
+              "qr_1793883916363_3": "produto_atende_one",
+              "qr_1793883923346_4": "produto_meu_estagiario",
+              "qr_1793883929069_5": "produto_sync",
+              "qr_1793897656790_1": "produto_audly"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "mensagem_proposta_email",
+            "kind": "send_message",
+            "label": "Mensagem proposta email",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Para enviarmos a proposta, qual é o seu melhor e-mail profissional?"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": "flow.emai_cliente"
+              },
+              "humanize": {
+                "type": "literal",
+                "value": false
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 3050,
+              "y": 1751.75
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "if_else_3"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "tag_lead_e_cria_card",
+            "kind": "platform_action",
+            "next": "mcp",
+            "label": "Tag lead e cria card",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "crm",
+                    "operation": "create_business",
+                    "contact_id": {
+                      "type": "literal",
+                      "value": "{{ event.contact_id }}"
+                    },
+                    "pipeline_id": {
+                      "type": "literal",
+                      "value": "01PIPE00000000000000000CRM1"
+                    },
+                    "pipeline_stage_id": {
+                      "type": "literal",
+                      "value": "01STAG000000000000000LEAD1"
+                    }
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG00000000000000000LEAD",
+                        "01TAG00000000000000000AGU1"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 3778,
+              "y": 1531
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "mcp",
+            "kind": "mcp",
+            "next": "confirmacao_recebimento",
+            "inputs": {
+              "tool_name": {
+                "type": "literal",
+                "value": "associateProduct"
+              },
+              "tool_label": {
+                "type": "literal",
+                "value": null
+              },
+              "output_name": {
+                "type": "literal",
+                "value": null
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "mcp_server_id": {
+                "type": "literal",
+                "value": "01MCPSRV000000000000000001"
+              },
+              "param_schemas": {
+                "type": "literal",
+                "value": [
+                  {
+                    "form": "llm",
+                    "name": "business_id",
+                    "type": "string",
+                    "required": true,
+                    "description": "Negócio que receberá o produto (ULID)."
+                  },
+                  {
+                    "form": "llm",
+                    "name": "product_id",
+                    "type": "string",
+                    "required": true,
+                    "description": "Produto a associar (ULID)."
+                  },
+                  {
+                    "form": "llm",
+                    "name": "quantity",
+                    "type": "number",
+                    "required": false,
+                    "description": "Quantidade (padrão 1)."
+                  },
+                  {
+                    "form": "llm",
+                    "name": "price",
+                    "type": "number",
+                    "required": false,
+                    "description": "Preço unitário. Omita para usar o preço do produto."
+                  }
+                ]
+              },
+              "provider_type": {
+                "type": "literal",
+                "value": "mcp"
+              },
+              "tool_parameters": {
+                "type": "literal",
+                "value": {
+                  "product_id": {
+                    "path": "flow.id_produto_escolhido",
+                    "type": "ref"
+                  },
+                  "business_id": {
+                    "path": "tag_lead_e_cria_card.results.0.business_id",
+                    "type": "ref"
+                  }
+                }
+              },
+              "structured_output": {
+                "type": "literal",
+                "value": []
+              },
+              "tool_configurations": {
+                "type": "literal",
+                "value": []
+              },
+              "structured_output_enabled": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 4158,
+              "y": 1498.5
+            },
+            "action_code": "mcp.call_tool"
+          },
+          {
+            "id": "produto_audly",
+            "kind": "assigner",
+            "next": "mensagem_proposta_email",
+            "label": "Produto Audly",
+            "inputs": {
+              "items": {
+                "type": "literal",
+                "value": [
+                  {
+                    "value": "01PROD00000000000000000005",
+                    "operation": "set",
+                    "input_type": "constant",
+                    "variable_selector": [
+                      "flow",
+                      "id_produto_escolhido"
+                    ]
+                  }
+                ]
+              },
+              "version": {
+                "type": "literal",
+                "value": "2"
+              },
+              "transactional": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 2478,
+              "y": 2144.5
+            },
+            "action_code": "data.assigner"
+          },
+          {
+            "id": "produto_atende_direito_2",
+            "kind": "assigner",
+            "next": "mensagem_proposta_email",
+            "label": "Produto Atende Direito",
+            "inputs": {
+              "items": {
+                "type": "literal",
+                "value": [
+                  {
+                    "value": "01PROD00000000000000000001",
+                    "operation": "set",
+                    "input_type": "constant",
+                    "variable_selector": [
+                      "flow",
+                      "id_produto_escolhido"
+                    ]
+                  }
+                ]
+              },
+              "version": {
+                "type": "literal",
+                "value": "2"
+              },
+              "transactional": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 2478,
+              "y": 1969.5
+            },
+            "action_code": "data.assigner"
+          },
+          {
+            "id": "produto_atende_one",
+            "kind": "assigner",
+            "next": "mensagem_proposta_email",
+            "label": "Produto Atende One",
+            "inputs": {
+              "items": {
+                "type": "literal",
+                "value": [
+                  {
+                    "value": "01PROD00000000000000000002",
+                    "operation": "set",
+                    "input_type": "constant",
+                    "variable_selector": [
+                      "flow",
+                      "id_produto_escolhido"
+                    ]
+                  }
+                ]
+              },
+              "version": {
+                "type": "literal",
+                "value": "2"
+              },
+              "transactional": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 2470,
+              "y": 1616.75
+            },
+            "action_code": "data.assigner"
+          },
+          {
+            "id": "produto_meu_estagiario",
+            "kind": "assigner",
+            "next": "mensagem_proposta_email",
+            "label": "Produto Meu estagiário",
+            "inputs": {
+              "items": {
+                "type": "literal",
+                "value": [
+                  {
+                    "value": "01PROD00000000000000000003",
+                    "operation": "set",
+                    "input_type": "constant",
+                    "variable_selector": [
+                      "flow",
+                      "id_produto_escolhido"
+                    ]
+                  }
+                ]
+              },
+              "version": {
+                "type": "literal",
+                "value": "2"
+              },
+              "transactional": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 2484,
+              "y": 1497.75
+            },
+            "action_code": "data.assigner"
+          },
+          {
+            "id": "produto_sync",
+            "kind": "assigner",
+            "next": "mensagem_proposta_email",
+            "label": "Produto Sync",
+            "inputs": {
+              "items": {
+                "type": "literal",
+                "value": [
+                  {
+                    "value": "01PROD00000000000000000004",
+                    "operation": "set",
+                    "input_type": "constant",
+                    "variable_selector": [
+                      "flow",
+                      "id_produto_escolhido"
+                    ]
+                  }
+                ]
+              },
+              "version": {
+                "type": "literal",
+                "value": "2"
+              },
+              "transactional": {
+                "type": "literal",
+                "value": false
+              }
+            },
+            "position": {
+              "x": 2482,
+              "y": 1700.75
+            },
+            "action_code": "data.assigner"
+          },
+          {
+            "id": "confirmacao_recebimento",
+            "kind": "send_message",
+            "next": "n_end",
+            "label": "Confirmação recebimento",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Perfeito, recebemos o seu e-mail! Em breve a nossa equipe envia a proposta. Se precisar de algo mais, é só chamar."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 4578,
+              "y": 1518
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "suporte",
+            "kind": "send_message",
+            "label": "Suporte",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Certo, vamos te ajudar! Qual dificuldade você está enfrentando?"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": "flow.relato_problema"
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "interactive_buttons"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": [
+                  {
+                    "id": "qr_1793972479060_2",
+                    "title": "1. Acesso",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793972482906_3",
+                    "title": "2. Lentidão",
+                    "payload": null
+                  },
+                  {
+                    "id": "qr_1793972492364_4",
+                    "title": "3. Outros",
+                    "payload": null
+                  }
+                ]
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 3256,
+              "y": 1177.5
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "n_1793975464661",
+              "qr_1793972479060_2": "tag_suporte_e_cria_card",
+              "qr_1793972482906_3": "tag_suporte_e_cria_card",
+              "qr_1793972492364_4": "tag_suporte_e_cria_card"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "tag_suporte_e_cria_card",
+            "kind": "platform_action",
+            "next": "registro_suporte",
+            "label": "Tag suporte e cria card",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG000000000000000000SUP"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  },
+                  {
+                    "domain": "crm",
+                    "operation": "create_business",
+                    "contact_id": {
+                      "type": "literal",
+                      "value": "{{ event.contact_id }}"
+                    },
+                    "pipeline_id": {
+                      "type": "literal",
+                      "value": "01PIPE00000000000000000CRM1"
+                    },
+                    "pipeline_stage_id": {
+                      "type": "literal",
+                      "value": "01STAG0000000000000000SUP1"
+                    }
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 3778,
+              "y": 1316.5
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "registro_suporte",
+            "kind": "send_message",
+            "next": "transferencia_suporte",
+            "label": "Registro suporte",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Registramos o seu chamado! Vou te passar para a nossa equipe de suporte. Aguarde um instante."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 4158,
+              "y": 1303.5
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "transferencia_suporte",
+            "kind": "platform_action",
+            "next": "n_end",
+            "label": "Transferência suporte",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "conversation",
+                    "operation": "transfer_department",
+                    "department_id": {
+                      "type": "literal",
+                      "value": "01DEP00000000000000000SUPP"
+                    }
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG0000000000000000TRANS",
+                        "01TAG00000000000000000PAUS"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 4618,
+              "y": 1316.5
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "tag_financeiro",
+            "kind": "platform_action",
+            "next": "registro_financeiro",
+            "label": "Tag financeiro",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG000000000000000000FIN"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 2098,
+              "y": 245.5
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "registro_financeiro",
+            "kind": "send_message",
+            "next": "transferencia_financeiro",
+            "label": "Registro financeiro",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Registramos  a sua solicitação! Vou te passar para a nossa equipe do financeiro. Aguarde um instante."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 2478,
+              "y": 232.5
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "transferencia_financeiro",
+            "kind": "platform_action",
+            "next": "n_end",
+            "label": "Transferência financeiro",
+            "inputs": {
+              "actions": {
+                "type": "literal",
+                "value": [
+                  {
+                    "domain": "conversation",
+                    "operation": "transfer_department",
+                    "department_id": {
+                      "type": "literal",
+                      "value": "01DEP00000000000000000FINN"
+                    }
+                  },
+                  {
+                    "domain": "contact",
+                    "tag_ids": {
+                      "type": "literal",
+                      "value": [
+                        "01TAG0000000000000000TRANS",
+                        "01TAG00000000000000000PAUS"
+                      ]
+                    },
+                    "operation": "add_tag"
+                  }
+                ]
+              },
+              "on_error": {
+                "type": "literal",
+                "value": "stop"
+              }
+            },
+            "position": {
+              "x": 2938,
+              "y": 245.5
+            },
+            "action_code": "platform.actions"
+          },
+          {
+            "id": "if_else_3",
+            "kind": "if_else",
+            "inputs": {
+              "cases": {
+                "type": "literal",
+                "value": [
+                  {
+                    "case_id": "case_1793975118434_1",
+                    "conditions": [
+                      {
+                        "id": "cond_1793975118434_2",
+                        "value": "@",
+                        "value_type": "constant",
+                        "variable_selector": [
+                          "flow",
+                          "emai_cliente"
+                        ],
+                        "comparison_operator": "contains"
+                      }
+                    ],
+                    "logical_operator": "and"
+                  }
+                ]
+              }
+            },
+            "position": {
+              "x": 3486,
+              "y": 1712.25
+            },
+            "next_cases": {
+              "case_1793975118434_1": "tag_lead_e_cria_card"
+            },
+            "next_false": "pede_email_certo"
+          },
+          {
+            "id": "pede_email_certo",
+            "kind": "send_message",
+            "label": "Pede email certo",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Esse e-mail não parece válido. Pode enviar de novo, por favor? Exemplo: [nome@empresa.com](mailto:nome@empresa.com)"
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": "flow.emai_cliente"
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": true
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 4436,
+              "y": 854
+            },
+            "next_cases": {
+              "no_input": "n_end",
+              "no_match": "n_end"
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "produto_sem_correspondencia",
+            "kind": "send_message",
+            "next": "produtos",
+            "label": "Produto sem correspondência",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Não consegui entender sua mensagem. Toque em **“Ver opções”** e escolha uma das opções da lista, por favor."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 2478,
+              "y": 1794.5
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "n_1793975464661",
+            "kind": "send_message",
+            "next": "suporte",
+            "label": "Não selecionar opção",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Não consegui entender sua mensagem. Toque em **“Ver opções”** e escolha uma das opções da lista, por favor."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 3738,
+              "y": 338.75
+            },
+            "action_code": "flow.send_message"
+          },
+          {
+            "id": "n_1793975466686",
+            "kind": "send_message",
+            "next": "menu_contato_recorrente",
+            "label": "Não selecionar opção",
+            "inputs": {
+              "text": {
+                "type": "literal",
+                "value": "Não consegui entender sua mensagem. Toque em **“Ver opções”** e escolha uma das opções da lista, por favor."
+              },
+              "media": {
+                "type": "literal",
+                "value": []
+              },
+              "save_to": {
+                "type": "literal",
+                "value": null
+              },
+              "humanize": {
+                "type": "literal",
+                "value": null
+              },
+              "template": {
+                "type": "literal",
+                "value": []
+              },
+              "variables": {
+                "type": "literal",
+                "value": []
+              },
+              "channel_id": {
+                "type": "literal",
+                "value": null
+              },
+              "timeout_ms": {
+                "type": "literal",
+                "value": 300000
+              },
+              "interactive": {
+                "type": "literal",
+                "value": []
+              },
+              "message_type": {
+                "type": "literal",
+                "value": "text"
+              },
+              "retry_config": {
+                "type": "literal",
+                "value": []
+              },
+              "quick_replies": {
+                "type": "literal",
+                "value": []
+              },
+              "semantic_match": {
+                "type": "literal",
+                "value": "off"
+              },
+              "wait_for_reply": {
+                "type": "literal",
+                "value": false
+              },
+              "quick_reply_ref": {
+                "type": "literal",
+                "value": null
+              },
+              "semantic_threshold": {
+                "type": "literal",
+                "value": 0.8
+              }
+            },
+            "position": {
+              "x": 2058,
+              "y": 706.75
+            },
+            "action_code": "flow.send_message"
+          }
+        ],
+        "flow_id": "01FLOW00000000000000000001",
+        "metadata": {
+          "name": "Atendimento Virtual - Demo",
+          "timeout_ms": 86400000
+        },
+        "version_id": "01VER000000000000000000001",
+        "entry_node_id": "n_start",
+        "schema_version": "1.0",
+        "variables_declared": [
+          {
+            "name": "nome_cliente",
+            "type": "string",
+            "scope": "flow"
+          },
+          {
+            "name": "tentativas",
+            "type": "number",
+            "scope": "flow",
+            "default": 0
+          },
+          {
+            "name": "emai_cliente",
+            "type": "string",
+            "scope": "flow"
+          },
+          {
+            "name": "produto_escolhido",
+            "type": "string",
+            "scope": "flow"
+          },
+          {
+            "name": "id_produto_escolhido",
+            "type": "string",
+            "scope": "flow"
+          },
+          {
+            "name": "transbordo_humano",
+            "type": "string",
+            "scope": "flow"
+          },
+          {
+            "name": "relato_problema",
+            "type": "string",
+            "scope": "flow"
+          }
+        ],
+        "validation_checksum": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "input_contract": null,
+      "output_contract": null,
+      "publish_notes": null
+    },
+    "agents": [],
+    "sub_agent_edges": [],
+    "skills": [],
+    "mcp_servers": [],
+    "function_tools": [],
+    "knowledge_articles": [],
+    "pivots": {
+      "agent_skills": [],
+      "agent_mcp": [],
+      "agent_function_tools": []
+    },
+    "knowledge_links": [],
+    "credential_refs": []
+  },
+  "secrets_blob": null
+}
